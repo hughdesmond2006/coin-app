@@ -14,7 +14,10 @@ if (process.env.NODE_ENV === "dev") {
   });
 }
 
-const coinAPI = (endpoint = "v1/cryptocurrency/listings/latest", params) => {
+const coinAPI = (
+  endpoint = "v1/cryptocurrency/listings/latest",
+  params = { limit: 5000 }
+) => {
   let response;
   return new Promise(async (resolve, reject) => {
     try {

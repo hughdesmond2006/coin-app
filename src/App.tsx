@@ -4,7 +4,7 @@ import { getCoinList } from "./api";
 import styled from "styled-components";
 //import CoinCard from "./components/CoinCard";
 import { Button, Input, Typography, Space, Table } from "antd";
-import "antd/dist/antd.css";
+import 'antd/dist/antd.dark.css';
 import { useNavigate } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import {

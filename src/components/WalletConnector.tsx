@@ -1,16 +1,41 @@
-import { useWeb3React } from "@web3-react/core";
-import { useEffect } from "react";
-import { injected } from "./connectors";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Typography } from "antd";
+import { ethers } from "ethers";
 
 const WalletConnector = () => {
-  const { active, account, library, connector, activate, deactivate } =
-    useWeb3React();
+  const [connected, setConnected] = useState(false);
+  const [address, setAddress] = useState("");
 
   const connect = async () => {
     try {
-      await activate(injected);
+      //await activate(injected);
+
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum,
+        "any"
+      );
+
+      // Prompt user for account connections
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+
+      setConnected(true);
+
+      setAddress(await signer.getAddress());
+
+      console.log("block num:", await provider.getBlockNumber());
+      console.log("provider:", provider);
+
+      const balance = await provider.getBalance("ethers.eth");
+
+      const balFormatted = ethers.utils.formatEther(balance);
+
+      const toWei = ethers.utils.parseEther("1.0");
+
+      console.log("balFormatted", balFormatted);
+      console.log("toWei", toWei);
+
       localStorage.setItem("isWalletConnected", "true");
     } catch (e) {
       console.log(e);
@@ -19,7 +44,7 @@ const WalletConnector = () => {
 
   const disconnect = () => {
     try {
-      deactivate();
+      //deactivate();
       localStorage.setItem("isWalletConnected", "false");
     } catch (e) {
       console.log(e);
@@ -31,7 +56,7 @@ const WalletConnector = () => {
     const connectWalletOnPageLoad = async () => {
       if (localStorage?.getItem("isWalletConnected") === "true") {
         try {
-          await activate(injected);
+          //await activate(injected);
           localStorage.setItem("isWalletConnected", "true");
         } catch (ex) {
           console.log(ex);
@@ -44,15 +69,13 @@ const WalletConnector = () => {
 
   return (
     <s.wrapper>
-      <s.btnConnect onClick={connect}>Connect to MetaMask</s.btnConnect>
-      {active ? (
+      {connected ? (
         <s.Text>
-          Connected with <b>{account}</b>
+          Connected with <b>{address}</b>
         </s.Text>
       ) : (
-        <s.Text>Not connected</s.Text>
+        <s.btnConnect onClick={connect}>Connect to MetaMask</s.btnConnect>
       )}
-      <s.btnDisconnect onClick={disconnect}>Disconnect</s.btnDisconnect>
     </s.wrapper>
   );
 };
@@ -76,7 +99,9 @@ const s = {
     justify-content: center;
     align-items: center;
   `,
-  Text: styled(Typography.Text)``,
+  Text: styled(Typography.Text)`
+    padding: 1rem;
+  `,
 };
 
 export default WalletConnector;
