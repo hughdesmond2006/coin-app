@@ -59,11 +59,14 @@ const CoinPage = () => {
       console.log("response", response);
 
       if (response?.data?.data && params.symbol) {
-        console.log(
-          "info:",
-          response.data.data[params.symbol.toLocaleUpperCase()][0]
-        );
-        setData(response.data.data[params.symbol.toLocaleUpperCase()][0]);
+        let d = response.data.data[params.symbol.toLocaleUpperCase()][0];
+
+        // for test api
+        if (!d) {
+          d = response.data.data[params.symbol.toLocaleUpperCase()];
+        }
+
+        setData(d);
       } else {
         throw new Error(`incorrect response data: ${response}`);
       }

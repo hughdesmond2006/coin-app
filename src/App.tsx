@@ -20,7 +20,7 @@ interface quoteData {
 }
 
 interface coinData {
-  id: number,
+  id: number;
   name: string;
   symbol: string;
   quote: {
@@ -36,7 +36,9 @@ const placeholderRecord = {
 };
 
 // fill 10 placeholder records and give unqiue ids to each
-let placeholderData = new Array(10).fill(placeholderRecord).map((x) => ({ ...x, id: Math.random() + 'xyz' }));
+let placeholderData = new Array(10)
+  .fill(placeholderRecord)
+  .map((x) => ({ ...x, id: Math.random() + "xyz" }));
 
 const App = () => {
   const [data, setData] = useState<coinData[]>(placeholderData);
@@ -71,6 +73,7 @@ const App = () => {
     } catch (e) {
       console.log("Error!", e);
       message.error("Error: " + e);
+      message.error("Did you set the api key? see README");
     }
 
     setLoading(false);

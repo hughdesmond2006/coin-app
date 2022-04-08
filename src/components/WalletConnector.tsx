@@ -9,8 +9,6 @@ const WalletConnector = () => {
 
   const connect = async () => {
     try {
-      //await activate(injected);
-
       const provider = new ethers.providers.Web3Provider(
         window.ethereum,
         "any"
@@ -24,28 +22,11 @@ const WalletConnector = () => {
 
       setAddress(await signer.getAddress());
 
-      console.log("block num:", await provider.getBlockNumber());
-      console.log("provider:", provider);
-
       const balance = await provider.getBalance("ethers.eth");
-
       const balFormatted = ethers.utils.formatEther(balance);
-
       const toWei = ethers.utils.parseEther("1.0");
 
-      console.log("balFormatted", balFormatted);
-      console.log("toWei", toWei);
-
       localStorage.setItem("isWalletConnected", "true");
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const disconnect = () => {
-    try {
-      //deactivate();
-      localStorage.setItem("isWalletConnected", "false");
     } catch (e) {
       console.log(e);
     }
@@ -56,7 +37,7 @@ const WalletConnector = () => {
     const connectWalletOnPageLoad = async () => {
       if (localStorage?.getItem("isWalletConnected") === "true") {
         try {
-          //await activate(injected);
+          await connect();
           localStorage.setItem("isWalletConnected", "true");
         } catch (ex) {
           console.log(ex);
