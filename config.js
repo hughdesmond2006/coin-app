@@ -10,7 +10,7 @@ const dev = {
 const prod = {
   app: {
     COINMARKET_API_URL: "https://pro-api.coinmarketcap.com",
-    COINMARKET_API_KEY: "009cb2cf-95c2-4534-8b0f-ccb05a1614ee",
+    COINMARKET_API_KEY: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   },
 };
 

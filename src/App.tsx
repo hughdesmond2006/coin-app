@@ -3,8 +3,8 @@ import "./App.css";
 import { getCoinList } from "./api";
 import styled from "styled-components";
 //import CoinCard from "./components/CoinCard";
-import { Button, Input, Typography, Space, Table } from "antd";
-import 'antd/dist/antd.dark.css';
+import { Button, Input, Typography, Space, Table, message } from "antd";
+import "antd/dist/antd.dark.css";
 import { useNavigate } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import {
@@ -20,6 +20,7 @@ interface quoteData {
 }
 
 interface coinData {
+  id: number,
   name: string;
   symbol: string;
   quote: {
@@ -28,22 +29,33 @@ interface coinData {
   };
 }
 
+// initially fill the table with dashes for a clean look while loading
+const placeholderRecord = {
+  name: "-",
+  symbol: "-",
+};
+
+// fill 10 placeholder records and give unqiue ids to each
+let placeholderData = new Array(10).fill(placeholderRecord).map((x) => ({ ...x, id: Math.random() + 'xyz' }));
+
 const App = () => {
-  const [data, setData] = useState<coinData[]>([]);
+  const [data, setData] = useState<coinData[]>(placeholderData);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchCol, setSearchCol] = useState("");
 
   let navigate = useNavigate();
 
+  console.log("data", data);
+
   // init load
   useEffect(() => {
-    setLoading(true);
     fetchData();
-    setLoading(false);
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
+
     let response;
 
     try {
@@ -51,13 +63,17 @@ const App = () => {
 
       if (response?.data) {
         console.log("data:", response.data.data);
+        setData([]);
         setData(response.data.data);
       } else {
         throw new Error();
       }
     } catch (e) {
       console.log("Error!", e);
+      message.error("Error: " + e);
     }
+
+    setLoading(false);
   };
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -152,14 +168,18 @@ const App = () => {
     {
       title: "Price",
       align: "right" as "right",
-      render: (x) => new Intl.NumberFormat().format(x.quote.USD.price),
-      sorter: (a, b) => a.quote.USD.price - b.quote.USD.price,
+      render: (x) =>
+        x.quote
+          ? "$" + new Intl.NumberFormat().format(x.quote?.USD?.price)
+          : "-",
+      sorter: (a, b) => a.quote?.USD?.price - b.quote?.USD?.price,
     },
     {
       title: "Price Change 24h",
       align: "right" as "right",
       render: (x) => {
-        const val = x.quote.USD.percent_change_24h.toFixed(2);
+        if (!x.quote) return "-";
+        const val = x.quote?.USD?.percent_change_24h?.toFixed(2);
         const color = `var(--${val < 0 ? "down" : "up"}-color)`;
         return (
           <div style={{ color }}>
@@ -169,7 +189,7 @@ const App = () => {
         );
       },
       sorter: (a, b) =>
-        a.quote.USD.percent_change_24h - b.quote.USD.percent_change_24h,
+        a.quote?.USD?.percent_change_24h - b.quote?.USD?.percent_change_24h,
     },
   ];
 
@@ -185,7 +205,7 @@ const App = () => {
         pagination={{ position: ["topRight", "bottomRight"] }}
         columns={columns}
         dataSource={data}
-        rowKey="symbol"
+        rowKey="id"
         loading={loading}
         tableLayout="fixed"
         onRow={(record) => ({

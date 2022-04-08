@@ -92,12 +92,7 @@ const s = {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  `,
-  btnDisconnect: styled(Button)`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    margin: 0.4rem;
   `,
   Text: styled(Typography.Text)`
     padding: 1rem;
