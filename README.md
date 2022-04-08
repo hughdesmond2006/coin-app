@@ -15,13 +15,7 @@ The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
 To run in prod mode (using the real coinmarketcap api) please first replace the following in config.js with your coinmarketcap api key:
-
-const prod = {
-  app: {
-    COINMARKET_API_URL: "https://pro-api.coinmarketcap.com",
-    COINMARKET_API_KEY: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  },
-};
+prod.app.COINMARKET_API_KEY: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 Then run:
 
