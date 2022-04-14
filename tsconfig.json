@@ -17,5 +17,8 @@
     "jsx": "react-jsx",
     "noImplicitAny": false
   },
-  "include": ["src"]
+  "include": ["src"],
+  "typeAcquisition": {
+    "include": ["jest"]
+  }
 }

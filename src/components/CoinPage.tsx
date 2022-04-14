@@ -34,6 +34,10 @@ const CoinPage = () => {
 
   let params = useParams();
 
+  if (process.env.NODE_ENV === "development") {
+    console.log("info", data);
+  }
+
   const g = data?.urls?.source_code;
   const t = data?.urls?.twitter;
   const r = data?.urls?.reddit;
@@ -51,24 +55,21 @@ const CoinPage = () => {
   }, []);
 
   const fetchData = async () => {
-    let response;
+    let d;
 
     try {
-      response = await getCoinInfo(params.symbol);
+      d = await getCoinInfo(params.symbol);
 
-      console.log("response", response);
+      if (d && params.symbol) {
+        let temp = d[params.symbol.toLocaleUpperCase()];
 
-      if (response?.data?.data && params.symbol) {
-        let d = response.data.data[params.symbol.toLocaleUpperCase()][0];
-
-        // for test api
-        if (!d) {
-          d = response.data.data[params.symbol.toLocaleUpperCase()];
+        if (Array.isArray(temp)) {
+          setData(temp[0])
+        } else {
+          setData(temp)
         }
-
-        setData(d);
       } else {
-        throw new Error(`incorrect response data: ${response}`);
+        throw new Error(`incorrect response data: ${d}`);
       }
     } catch (e) {
       console.log("Error!", e);
@@ -76,12 +77,12 @@ const CoinPage = () => {
   };
 
   return (
-    <div>
+    <div data-testid="info_container">
       <s.Link to={`/`}>
         <s.back>{"<< Back"}</s.back>
       </s.Link>
       <s.coinPage>
-        <s.imgLogo src={data?.logo} />
+        <s.imgLogo src={data?.logo} alt="Coin Logo" />
         <s.symbol>{params.symbol}</s.symbol>
         <s.name>{data?.name}</s.name>
         <s.description>{data?.description}</s.description>
@@ -95,22 +96,22 @@ const CoinPage = () => {
           data?.urls.website.map((url) => <s.url key={url}>{url}</s.url>)}
         <s.iconContainer>
           {gitURL && (
-            <s.iconLink href={gitURL}>
+            <s.iconLink href={gitURL} title="git">
               <GithubFilled style={{ color: "#ffffff" }} />
             </s.iconLink>
           )}
           {twitterURL && (
-            <s.iconLink href={twitterURL}>
+            <s.iconLink href={twitterURL} title="twitter">
               <TwitterOutlined style={{ color: "#55ACEE" }} />
             </s.iconLink>
           )}
           {redditURL && (
-            <s.iconLink href={redditURL}>
+            <s.iconLink href={redditURL} title="reddit">
               <RedditCircleFilled style={{ color: "#F74300" }} />
             </s.iconLink>
           )}
           {facebookURL && (
-            <s.iconLink href={facebookURL}>
+            <s.iconLink href={facebookURL} title="facebook">
               <FacebookFilled style={{ color: "#3B5998" }} />
             </s.iconLink>
           )}

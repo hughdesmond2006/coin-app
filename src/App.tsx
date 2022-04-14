@@ -48,7 +48,9 @@ const App = () => {
 
   let navigate = useNavigate();
 
-  console.log("data", data);
+  if (process.env.NODE_ENV === "development") {
+    console.log("data", data);
+  }
 
   // init load
   useEffect(() => {
@@ -58,22 +60,15 @@ const App = () => {
   const fetchData = async () => {
     setLoading(true);
 
-    let response;
-
     try {
-      response = await getCoinList();
-
-      if (response?.data) {
-        console.log("data:", response.data.data);
-        setData([]);
-        setData(response.data.data);
-      } else {
-        throw new Error();
-      }
+      setData(await getCoinList());
     } catch (e) {
       console.log("Error!", e);
-      message.error("Error: " + e);
-      message.error("Did you set the api key? see README");
+
+      if (process.env.NODE_ENV !== "test") {
+        message.error("Error: " + e);
+        message.error("Did you set the api key? see README");
+      }
     }
 
     setLoading(false);
@@ -121,7 +116,10 @@ const App = () => {
       </div>
     ),
     filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+      <SearchOutlined
+        style={{ color: filtered ? "#1890ff" : undefined }}
+        data-testid="search_icon"
+      />
     ),
     onFilter: (value, record) =>
       record[dataIndex]

@@ -5,12 +5,8 @@ import reportWebVitals from "./reportWebVitals";
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CoinPage from "./components/CoinPage";
-//import { Web3ReactProvider } from "@web3-react/core";
 
 const rootElement = document.getElementById("root");
-
-//const getLibrary = (provider) => new Web3(provider);
-//<Web3ReactProvider getLibrary={getLibrary}>
 
 render(
   <React.StrictMode>
@@ -26,7 +22,7 @@ render(
             </main>
           }
         />
-      </Routes>
+      </Routes>{" "}
     </BrowserRouter>
   </React.StrictMode>,
   rootElement
