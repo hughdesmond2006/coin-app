@@ -68,7 +68,7 @@ describe("test", () => {
       await waitFor(() => expect(m_getCoinList).toHaveBeenCalledTimes(1));
 
       //verify homepage
-      expect(screen.getByText(/Hugh's Pluto Screener/i)).toBeInTheDocument();
+      expect(screen.getByText(/Hugh's Coin App/i)).toBeInTheDocument();
       expect(screen.getByText(/price change 24/i)).toBeInTheDocument();
     });
 
