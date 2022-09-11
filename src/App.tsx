@@ -196,7 +196,7 @@ const App = () => {
 
   return (
     <s.app className="App">
-      <s.Title level={4}>Hugh's Pluto Screener</s.Title>
+      <s.Title level={4}>Hugh's Coin App</s.Title>
       <WalletConnector />
       <Table
         style={{ maxWidth: "40rem" }}

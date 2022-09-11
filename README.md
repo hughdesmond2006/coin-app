@@ -1,4 +1,4 @@
-# Hugh's Pluto Screener
+# Hugh's Coin App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
